@@ -456,6 +456,59 @@ export const ALL_BLESSINGS: Blessing[] = [
   { type: 'goldRush', name: 'Blessing of Midas', description: 'Doubles all gold earned from enemies for 60 seconds.', durationSeconds: 60, cooldownSeconds: 86400, bonusMultiplier: 2 }, // 24 hours
   { type: 'powerSurge', name: 'Warrior\'s Zeal', description: 'Increases all hero DPS by 50% for 60 seconds.', durationSeconds: 60, cooldownSeconds: 86400, bonusMultiplier: 1.5 },
   { type: 'skillFrenzy', name: 'Arcane Haste', description: 'Instantly recharges all hero skills.', durationSeconds: 0, cooldownSeconds: 86400, bonusMultiplier: 0 }, // Instant effect
+
+  //Add
+    { type: 'critStorm', name: 'Critical Tempest', description: 'All attacks have 100% critical chance for 30 seconds.', durationSeconds: 30, cooldownSeconds: 7200, bonusMultiplier: 1 }, // 2 hours
+  { type: 'manaTide', name: 'Mana Spring', description: 'All hero skills recharge 300% faster for 45 seconds.', durationSeconds: 45, cooldownSeconds: 5400, bonusMultiplier: 3 }, // 1.5 hours
+  { type: 'timeWarp', name: 'Time Compression', description: 'All hero attack speed increased by 200% for 20 seconds.', durationSeconds: 20, cooldownSeconds: 3600, bonusMultiplier: 2 }, // 1 hour
+  { type: 'divineShield', name: 'Divine Protection', description: 'All heroes become invulnerable for 15 seconds.', durationSeconds: 15, cooldownSeconds: 10800, bonusMultiplier: 0 }, // 3 hours
+  { type: 'lootExplosion', name: 'Treasure Cascade', description: 'Enemies drop 5x more items and gold for 40 seconds.', durationSeconds: 40, cooldownSeconds: 14400, bonusMultiplier: 5 }, // 4 hours
+  { type: 'experienceFlood', name: 'Wisdom Deluge', description: 'Experience gain increased by 400% for 60 seconds.', durationSeconds: 60, cooldownSeconds: 10800, bonusMultiplier: 4 }, // 3 hours
+  { type: 'cloneArmy', name: 'Mirror Image', description: 'Each hero is duplicated for 25 seconds (50% effectiveness).', durationSeconds: 25, cooldownSeconds: 7200, bonusMultiplier: 0.5 }, // 2 hours
+  { type: 'elementalOverload', name: 'Elemental Convergence', description: 'All elemental damage increased by 300% for 35 seconds.', durationSeconds: 35, cooldownSeconds: 9000, bonusMultiplier: 3 }, // 2.5 hours
+  { type: 'berserkRage', name: 'Berserker Fury', description: 'Hero damage increases as their health decreases for 30 seconds.', durationSeconds: 30, cooldownSeconds: 7200, bonusMultiplier: 0 }, // 2 hours
+  { type: 'phantomStrike', name: 'Phantom Assault', description: 'All attacks bypass enemy armor for 20 seconds.', durationSeconds: 20, cooldownSeconds: 5400, bonusMultiplier: 0 }, // 1.5 hours
+  { type: 'chainReaction', name: 'Chain Lightning', description: 'All attacks chain to 3 additional enemies for 25 seconds.', durationSeconds: 25, cooldownSeconds: 7200, bonusMultiplier: 3 }, // 2 hours
+  { type: 'healingRain', name: 'Healing Torrent', description: 'All heroes heal for 5% of their max health every second for 30 seconds.', durationSeconds: 30, cooldownSeconds: 10800, bonusMultiplier: 0.05 }, // 3 hours
+  { type: 'bossBane', name: 'Titan Slayer', description: 'Damage against bosses increased by 500% for 45 seconds.', durationSeconds: 45, cooldownSeconds: 14400, bonusMultiplier: 5 }, // 4 hours
+  { type: 'speedDemon', name: 'Speed Demon', description: 'All hero movement and animation speed increased by 150% for 40 seconds.', durationSeconds: 40, cooldownSeconds: 5400, bonusMultiplier: 1.5 }, // 1.5 hours
+  { type: 'resourceHarvest', name: 'Resource Windfall', description: 'All resource generation (gold, essence, gems) increased by 250% for 50 seconds.', durationSeconds: 50, cooldownSeconds: 18000, bonusMultiplier: 2.5 }, // 5 hours
+  { type: 'deathMark', name: 'Death\'s Mark', description: 'Enemies take 100% more damage from critical hits for 30 seconds.', durationSeconds: 30, cooldownSeconds: 7200, bonusMultiplier: 1 }, // 2 hours
+  { type: 'magicAmplifier', name: 'Arcane Amplification', description: 'All skill damage increased by 400% for 25 seconds.', durationSeconds: 25, cooldownSeconds: 9000, bonusMultiplier: 4 }, // 2.5 hours
+  { type: 'fortuneFavor', name: 'Fortune\'s Favor', description: 'All luck-based effects (crit, dodge, loot) are doubled for 60 seconds.', durationSeconds: 60, cooldownSeconds: 21600, bonusMultiplier: 2 }, // 6 hours
+  { type: 'timeFreeze', name: 'Chrono Freeze', description: 'All enemies are frozen in place for 10 seconds.', durationSeconds: 10, cooldownSeconds: 14400, bonusMultiplier: 0 }, // 4 hours
+  { type: 'soulHarvest', name: 'Soul Reap', description: 'Defeating enemies restores 10% of max health and energy to all heroes for 30 seconds.', durationSeconds: 30, cooldownSeconds: 10800, bonusMultiplier: 0.1 }, // 3 hours
+  { type: 'precisionStrike', name: 'Perfect Precision', description: 'All attacks cannot miss and have 50% increased critical damage for 35 seconds.', durationSeconds: 35, cooldownSeconds: 7200, bonusMultiplier: 0.5 }, // 2 hours
+  { type: 'elementalImmunity', name: 'Elemental Ward', description: 'All heroes become immune to elemental damage for 25 seconds.', durationSeconds: 25, cooldownSeconds: 14400, bonusMultiplier: 0 }, // 4 hours
+  { type: 'damageReflect', name: 'Thorn Aura', description: 'All heroes reflect 100% of damage taken back to attackers for 20 seconds.', durationSeconds: 20, cooldownSeconds: 10800, bonusMultiplier: 1 }, // 3 hours
+  { type: 'infiniteMana', name: 'Mana Infinity', description: 'All hero skills cost no energy for 15 seconds.', durationSeconds: 15, cooldownSeconds: 18000, bonusMultiplier: 0 }, // 5 hours
+  { type: 'petEvolution', name: 'Pet Ascension', description: 'All pets become 300% more effective for 45 seconds.', durationSeconds: 45, cooldownSeconds: 21600, bonusMultiplier: 3 }, // 6 hours
+  { type: 'heroicResolve', name: 'Heroic Resolve', description: 'Heroes cannot die and fight with 1 HP when they would normally die for 30 seconds.', durationSeconds: 30, cooldownSeconds: 28800, bonusMultiplier: 0 }, // 8 hours
+  { type: 'aoeExpansion', name: 'Area Expansion', description: 'All area effect attacks have 200% larger radius for 40 seconds.', durationSeconds: 40, cooldownSeconds: 10800, bonusMultiplier: 2 }, // 3 hours
+  { type: 'stealthField', name: 'Shadow Veil', description: 'All heroes become invisible and untargetable for 15 seconds.', durationSeconds: 15, cooldownSeconds: 14400, bonusMultiplier: 0 }, // 4 hours
+  { type: 'damageOverTime', name: 'Bleeding Wounds', description: 'All attacks apply a stacking damage over time effect for 30 seconds.', durationSeconds: 30, cooldownSeconds: 7200, bonusMultiplier: 0 }, // 2 hours
+  { type: 'resourceConversion', name: 'Alchemical Transmutation', description: 'All enemy drops are converted to gold at 200% value for 50 seconds.', durationSeconds: 50, cooldownSeconds: 21600, bonusMultiplier: 2 }, // 6 hours
+  { type: 'statSteal', name: 'Stat Vampire', description: 'Heroes steal 5% of enemy stats with each hit for 25 seconds.', durationSeconds: 25, cooldownSeconds: 14400, bonusMultiplier: 0.05 }, // 4 hours
+  { type: 'revivalWave', name: 'Mass Resurrection', description: 'All fallen heroes are revived with 50% health after 5 seconds.', durationSeconds: 5, cooldownSeconds: 43200, bonusMultiplier: 0 }, // 12 hours
+  { type: 'damageCapRemoval', name: 'Limit Breaker', description: 'Removes damage caps on all attacks for 20 seconds.', durationSeconds: 20, cooldownSeconds: 43200, bonusMultiplier: 0 }, // 12 hours
+  { type: 'enemyWeaken', name: 'Enfeeblement', description: 'All enemies deal 70% less damage for 35 seconds.', durationSeconds: 35, cooldownSeconds: 10800, bonusMultiplier: 0.3 }, // 3 hours
+  { type: 'cooldownReset', name: 'Temporal Reset', description: 'Resets cooldown of all blessings (except this one) after use.', durationSeconds: 0, cooldownSeconds: 86400, bonusMultiplier: 0 }, // 24 hours
+  { type: 'essenceHarvest', name: 'Essence Overflow', description: 'Essence gain increased by 300% for 60 seconds.', durationSeconds: 60, cooldownSeconds: 14400, bonusMultiplier: 3 }, // 4 hours
+  { type: 'fusionBoost', name: 'Fusion Catalyst', description: 'All fusion and crafting success rates increased by 50% for 120 seconds.', durationSeconds: 120, cooldownSeconds: 43200, bonusMultiplier: 0.5 }, // 12 hours
+  { type: 'heroLevelBoost', name: 'Experience Surge', description: 'Heroes gain 10x experience from all sources for 45 seconds.', durationSeconds: 45, cooldownSeconds: 28800, bonusMultiplier: 10 }, // 8 hours
+  { type: 'petLevelBoost', name: 'Pet Enlightenment', description: 'Pets gain 5x experience for 60 seconds.', durationSeconds: 60, cooldownSeconds: 21600, bonusMultiplier: 5 }, // 6 hours
+  { type: 'bossSpawn', name: 'Boss Lure', description: 'Boss spawn chance increased by 1000% for 90 seconds.', durationSeconds: 90, cooldownSeconds: 43200, bonusMultiplier: 10 }, // 12 hours
+  { type: 'rareDrop', name: 'Treasure Magnet', description: 'Rare item drop chance increased by 500% for 75 seconds.', durationSeconds: 75, cooldownSeconds: 28800, bonusMultiplier: 5 }, // 8 hours
+  { type: 'attackChain', name: 'Combo Master', description: 'Each consecutive hit on same target deals 10% more damage for 30 seconds.', durationSeconds: 30, cooldownSeconds: 7200, bonusMultiplier: 0.1 }, // 2 hours
+  { type: 'healthSwap', name: 'Life Transfer', description: '50% of damage dealt is converted to healing for all heroes for 25 seconds.', durationSeconds: 25, cooldownSeconds: 14400, bonusMultiplier: 0.5 }, // 4 hours
+  { type: 'energyOverflow', name: 'Energy Overflow', description: 'All heroes start with max energy and gain 200% more for 40 seconds.', durationSeconds: 40, cooldownSeconds: 10800, bonusMultiplier: 2 }, // 3 hours
+  { type: 'sizeReduction', name: 'Minimize Foe', description: 'All enemies are shrunk, reducing their stats by 40% for 30 seconds.', durationSeconds: 30, cooldownSeconds: 14400, bonusMultiplier: 0.4 }, // 4 hours
+  { type: 'sizeIncrease', name: 'Maximize Heroes', description: 'All heroes are enlarged, increasing their stats by 40% for 30 seconds.', durationSeconds: 30, cooldownSeconds: 14400, bonusMultiplier: 0.4 }, // 4 hours
+  { type: 'instantKill', name: 'Divine Judgment', description: 'Each attack has a 10% chance to instantly kill normal enemies for 20 seconds.', durationSeconds: 20, cooldownSeconds: 43200, bonusMultiplier: 0.1 }, // 12 hours
+  { type: 'damageShield', name: 'Damage Absorber', description: 'All heroes gain a shield equal to 100% of their max health for 25 seconds.', durationSeconds: 25, cooldownSeconds: 18000, bonusMultiplier: 1 }, // 5 hours
+  { type: 'buffExtension', name: 'Duration Mastery', description: 'All buff durations on heroes increased by 300% for 60 seconds.', durationSeconds: 60, cooldownSeconds: 21600, bonusMultiplier: 3 }, // 6 hours
+  { type: 'debuffExtension', name: 'Suffering Prolonged', description: 'All debuff durations on enemies increased by 300% for 60 seconds.', durationSeconds: 60, cooldownSeconds: 21600, bonusMultiplier: 3 }, // 6 hours
+  { type: 'perfectDodge', name: 'Phantom Dance', description: 'All heroes have 75% dodge chance for 15 seconds.', durationSeconds: 15, cooldownSeconds: 14400, bonusMultiplier: 0.75 }, // 4 hours
 ];
 
 export const SYNERGY_BONUSES: { [key in Role]?: { count: number, bonus: { type: 'dpsPercent' | 'goldDropPercent' | 'clickDamagePercent', value: number }, description: string }[] } = {
