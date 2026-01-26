@@ -1,0 +1,126 @@
+<div class="h-full w-full bg-gray-800 p-4 flex flex-col animate-fadeIn">
+  <header class="text-center mb-4">
+    <h1 class="text-3xl font-orbitron text-green-400">Global Upgrades</h1>
+    <p class="text-gray-400">Enhance your overall power and earnings.</p>
+  </header>
+
+  <div class="flex-grow overflow-y-auto pr-2 space-y-6">
+    <!-- General Upgrades -->
+    <div>
+      <h2 class="text-2xl font-orbitron text-green-400 mb-3">General Upgrades</h2>
+      <div class="space-y-4">
+        <div class="bg-gray-900 rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-lg text-white">Enhanced Clicking</h3>
+            <p class="text-sm text-gray-400">Increases damage dealt per click.</p>
+            <p class="text-md text-green-300">Current Damage: <span class="font-semibold">{{ formatNumber(gameService().gameState().clickDamage) }}</span></p>
+          </div>
+          <button 
+            (click)="upgradeClickDamage()"
+            [disabled]="gameService().gameState().gold < gameService().getClickDamageUpgradeCost()"
+            class="px-4 py-2 bg-green-600 text-white font-bold rounded-md hover:bg-green-700 transition-all duration-200 disabled:bg-gray-600 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100 disabled:hover:scale-100">
+            <div>Upgrade</div>
+            <div class="text-xs text-yellow-200">💰 {{ formatNumber(gameService().getClickDamageUpgradeCost()) }}</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Prestige Section -->
+    <div class="border-t-2 border-gray-700 pt-6">
+        <h2 class="text-2xl font-orbitron text-cyan-400 text-center mb-4">Prestige</h2>
+        <div class="bg-gray-900 rounded-lg p-4">
+            <div class="text-center mb-4">
+                <p class="text-gray-300">Reset your progress to earn Prestige Points and unlock permanent bonuses.</p>
+                <p class="text-gray-400 text-sm">Requirement: Reach Stage 50</p>
+            </div>
+
+            <button 
+                (click)="prestige()"
+                [disabled]="!gameService().canPrestige()"
+                [appTooltip]="!gameService().canPrestige() ? 'You must reach Stage 50 to Prestige' : 'Reset your progress for powerful permanent bonuses!'"
+                class="w-full py-3 mb-4 bg-cyan-600 text-white font-bold rounded-md hover:bg-cyan-700 transition-all duration-200 disabled:bg-gray-700 disabled:cursor-not-allowed transform active:scale-100 disabled:hover:scale-100 hover:scale-105"
+                [class.animate-pulse-glow-cyan]="gameService().canPrestige()">
+                <span>Prestige Now</span>
+                @if(gameService().canPrestige()){
+                    <span class="block text-xs text-cyan-200">Rewards: {{ gameService().getPrestigePointsReward() }} 💎</span>
+                } @else {
+                    <span class="block text-xs text-gray-400">Current Stage: {{ gameService().gameState().stage }}</span>
+                }
+            </button>
+        </div>
+
+        <!-- Prestige Upgrades -->
+        <h3 class="text-2xl font-orbitron text-cyan-400 mt-6 mb-3">Prestige Upgrades</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Gold Rush -->
+          <div class="bg-gray-800/50 rounded-lg p-4 flex flex-col text-center items-center justify-between" appTooltip="Each level increases all gold gained by 5% permanently.">
+            <div class="text-cyan-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" /></svg></div>
+            <h3 class="font-bold text-lg text-white mt-2">Gold Rush</h3>
+            <p class="text-sm text-gray-400 flex-grow">Permanently increase gold from all sources.</p>
+            <p class="text-md text-cyan-300 my-2">Current Bonus: <span class="font-semibold">+{{ ((gameService().gameState().goldMultiplier - 1) * 100).toFixed(0) }}%</span></p>
+            <button (click)="upgradeGoldMultiplier()" [disabled]="gameService().gameState().prestigePoints < gameService().getGoldMultiplierUpgradeCost()" class="w-full mt-2 px-4 py-2 bg-cyan-800 text-white font-bold rounded-md hover:bg-cyan-700 transition-all duration-200 disabled:bg-gray-600 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95">
+              <div>Upgrade</div>
+              <div class="text-xs text-cyan-200">💎 {{ gameService().getGoldMultiplierUpgradeCost() }}</div>
+            </button>
+          </div>
+          <!-- Prestige Power -->
+          <div class="bg-gray-800/50 rounded-lg p-4 flex flex-col text-center items-center justify-between" appTooltip="Each level increases the base DPS of all heroes permanently.">
+             <div class="text-cyan-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+            <h3 class="font-bold text-lg text-white mt-2">Prestige Power</h3>
+            <p class="text-sm text-gray-400 flex-grow">Increases the base DPS of all heroes.</p>
+            <p class="text-md text-cyan-300 my-2">Current Bonus: <span class="font-semibold">+{{ gameService().getPrestigePowerEffect() }}%</span> <span class="text-xs">(Lvl {{ gameService().gameState().prestigePowerLevel }})</span></p>
+            <button (click)="upgradePrestigePower()" [disabled]="gameService().gameState().prestigePoints < gameService().getPrestigePowerCost()" class="w-full mt-2 px-4 py-2 bg-cyan-800 text-white font-bold rounded-md hover:bg-cyan-700 transition-all duration-200 disabled:bg-gray-600 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95">
+              <div>Upgrade</div>
+              <div class="text-xs text-cyan-200">💎 {{ formatNumber(gameService().getPrestigePowerCost()) }}</div>
+            </button>
+          </div>
+          <!-- Clicking Frenzy -->
+          <div class="bg-gray-800/50 rounded-lg p-4 flex flex-col text-center items-center justify-between" appTooltip="Each level increases your base click damage bonus permanently.">
+            <div class="text-cyan-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8 14.25h.008v.008H8v-.008z" /></svg></div>
+            <h3 class="font-bold text-lg text-white mt-2">Clicking Frenzy</h3>
+            <p class="text-sm text-gray-400 flex-grow">Permanently boosts your base click damage.</p>
+            <p class="text-md text-cyan-300 my-2">Current Bonus: <span class="font-semibold">+{{ gameService().getClickingFrenzyEffect() }}%</span> <span class="text-xs">(Lvl {{ gameService().gameState().clickingFrenzyLevel }})</span></p>
+            <button (click)="upgradeClickingFrenzy()" [disabled]="gameService().gameState().prestigePoints < gameService().getClickingFrenzyCost()" class="w-full mt-2 px-4 py-2 bg-cyan-800 text-white font-bold rounded-md hover:bg-cyan-700 transition-all duration-200 disabled:bg-gray-600 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95">
+              <div>Upgrade</div>
+              <div class="text-xs text-cyan-200">💎 {{ formatNumber(gameService().getClickingFrenzyCost()) }}</div>
+            </button>
+          </div>
+          <!-- Starting Gold -->
+          <div class="bg-gray-800/50 rounded-lg p-4 flex flex-col text-center items-center justify-between" appTooltip="Each level increases the amount of gold you start with after each Prestige.">
+            <div class="text-cyan-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg></div>
+            <h3 class="font-bold text-lg text-white mt-2">Starting Gold</h3>
+            <p class="text-sm text-gray-400 flex-grow">Get a lump sum of gold after prestiging.</p>
+            <p class="text-md text-cyan-300 my-2">Current Bonus: <span class="font-semibold">💰 {{ formatNumber(gameService().getStartingGoldEffect()) }}</span> <span class="text-xs">(Lvl {{ gameService().gameState().startingGoldLevel }})</span></p>
+            <button (click)="upgradeStartingGold()" [disabled]="gameService().gameState().prestigePoints < gameService().getStartingGoldCost()" class="w-full mt-2 px-4 py-2 bg-cyan-800 text-white font-bold rounded-md hover:bg-cyan-700 transition-all duration-200 disabled:bg-gray-600 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95">
+              <div>Upgrade</div>
+              <div class="text-xs text-cyan-200">💎 {{ formatNumber(gameService().getStartingGoldCost()) }}</div>
+            </button>
+          </div>
+           <!-- Expedition Charter -->
+          <div class="bg-gray-800/50 rounded-lg p-4 flex flex-col text-center items-center justify-between" appTooltip="Each level unlocks an additional slot to send heroes on expeditions simultaneously.">
+            <div class="text-cyan-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 16.382V5.618a1 1 0 00-.553-.894L15 2m-6 5l6-3m-6 3l6 10" /></svg></div>
+            <h3 class="font-bold text-lg text-white mt-2">Expedition Charter</h3>
+            <p class="text-sm text-gray-400 flex-grow">Unlock more expedition team slots.</p>
+            <p class="text-md text-cyan-300 my-2">Current Slots: <span class="font-semibold">{{ gameService().getExpeditionSlotsEffect() }}</span> <span class="text-xs">(Lvl {{ gameService().gameState().expeditionSlotsLevel }})</span></p>
+            <button (click)="upgradeExpeditionSlots()" [disabled]="gameService().gameState().prestigePoints < gameService().getExpeditionSlotsCost()" class="w-full mt-2 px-4 py-2 bg-cyan-800 text-white font-bold rounded-md hover:bg-cyan-700 transition-all duration-200 disabled:bg-gray-600 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95">
+              <div>Upgrade</div>
+              <div class="text-xs text-cyan-200">💎 {{ formatNumber(gameService().getExpeditionSlotsCost()) }}</div>
+            </button>
+          </div>
+          <!-- Dungeon Charter -->
+          <div class="bg-gray-800/50 rounded-lg p-4 flex flex-col text-center items-center justify-between" appTooltip="Each level unlocks an additional slot to run dungeons simultaneously.">
+            <div class="text-cyan-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 2.172a4.032 4.032 0 015.656 0A4.032 4.032 0 0121 5v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5c0-1.1.45-2.1 1.172-2.828a4.032 4.032 0 015.656 0zM12 18v-6" /></svg></div>
+            <h3 class="font-bold text-lg text-white mt-2">Dungeon Charter</h3>
+            <p class="text-sm text-gray-400 flex-grow">Unlock more dungeon run slots.</p>
+            <p class="text-md text-cyan-300 my-2">Current Slots: <span class="font-semibold">{{ gameService().getDungeonSlotsEffect() }}</span> <span class="text-xs">(Lvl {{ gameService().gameState().dungeonSlotsLevel }})</span></p>
+            <button (click)="upgradeDungeonSlots()" [disabled]="gameService().gameState().prestigePoints < gameService().getDungeonSlotsCost()" class="w-full mt-2 px-4 py-2 bg-cyan-800 text-white font-bold rounded-md hover:bg-cyan-700 transition-all duration-200 disabled:bg-gray-600 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95">
+              <div>Upgrade</div>
+              <div class="text-xs text-cyan-200">💎 {{ formatNumber(gameService().getDungeonSlotsCost()) }}</div>
+            </button>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

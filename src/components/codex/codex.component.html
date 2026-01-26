@@ -1,0 +1,127 @@
+<div class="h-full w-full bg-gray-800 p-4 flex flex-col animate-fadeIn">
+  <header class="text-center mb-4">
+    <h1 class="text-3xl font-orbitron text-blue-400">Hero Codex</h1>
+    <p class="text-gray-400">Discover and collect all the heroes in the universe.</p>
+  </header>
+  
+  <!-- Filters -->
+  <div class="bg-gray-900/50 p-3 rounded-lg mb-4 flex flex-col sm:flex-row gap-4 items-center justify-center">
+    <div class="flex items-center gap-2 w-full sm:w-auto">
+      <label for="rarity-filter" class="text-gray-400 font-semibold text-sm">Rarity:</label>
+      <select id="rarity-filter" (change)="onRarityFilterChange($event)" class="w-full bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1.5">
+        @for(rarity of rarities; track rarity) {
+          <option [value]="rarity">{{ rarity }}</option>
+        }
+      </select>
+    </div>
+    <div class="flex items-center gap-2 w-full sm:w-auto">
+      <label for="role-filter" class="text-gray-400 font-semibold text-sm">Role:</label>
+      <select id="role-filter" (change)="onRoleFilterChange($event)" class="w-full bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1.5">
+        @for(role of roles; track role) {
+          <option [value]="role">{{ role }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="flex-grow overflow-y-auto pr-2">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      @for (hero of filteredHeroes(); track hero.id) {
+        @let unlocked = isHeroUnlocked(hero.id);
+        <div 
+          (click)="openHeroDetails(hero)"
+          class="relative bg-gray-900 rounded-lg p-3 flex flex-col items-center justify-center text-center border-2 transition-all duration-300 cursor-pointer hover:-translate-y-1 group"
+          [class]="getRarityBorderClass(hero.rarity)"
+          [class.grayscale]="!unlocked"
+          [class.opacity-60]="!unlocked"
+          [class.hover:grayscale-0]="!unlocked"
+          [class.hover:opacity-100]="!unlocked"
+          [class.animate-pulse-glow-cyan]="isHeroNew(hero.id)"
+        >
+          @if(isHeroNew(hero.id)) {
+            <span class="absolute top-1 right-1 bg-cyan-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full z-20 animate-new-badge-pulse">NEW</span>
+          }
+
+          @if(!unlocked) {
+            <div class="absolute inset-0 bg-black/60 rounded-lg z-10 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-700" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          }
+
+          <div 
+            class="w-20 h-20 rounded-md flex-shrink-0 flex items-center justify-center bg-gray-700/50 border-2 mb-2" 
+            [class]="getRarityBorderClass(hero.rarity)">
+            <span class="font-orbitron text-3xl" [class]="unlocked ? 'text-gray-300' : 'text-gray-600'">
+              {{ unlocked ? getHeroInitials(hero.name) : '?' }}
+            </span>
+          </div>
+          <h3 class="font-bold text-sm leading-tight" [class]="unlocked ? 'text-white' : 'text-gray-500 group-hover:text-white transition-colors'">{{ unlocked ? hero.name : '?????????' }}</h3>
+          <p class="text-xs font-semibold" [class]="getRarityTextColor(hero.rarity)">{{ hero.rarity }} {{ unlocked ? hero.role : '' }}</p>
+        </div>
+      } @empty {
+        <p class="col-span-full text-center text-gray-500 italic py-10">No heroes match the current filters.</p>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Hero Details Modal -->
+@if(isModalOpen() && selectedHeroData(); as data) {
+  <div class="absolute inset-0 bg-black/70 flex items-center justify-center z-50 backdrop-blur-sm" (click)="closeModal()">
+    <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 border-2 animate-modal-fade-in relative" 
+         [class]="getRarityBorderClass(data.hero.rarity)"
+         (click)="$event.stopPropagation()">
+      <button (click)="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white text-3xl leading-none transform transition-transform hover:scale-125 z-10">&times;</button>
+      
+      @if(data.unlocked) {
+        <div class="animate-content-fade-in" [class.animate-pop-in-soft]="data.isNew">
+          <!-- Hero Header -->
+          <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
+            <div class="w-24 h-24 rounded-lg flex-shrink-0 flex items-center justify-center border-4 relative overflow-hidden bg-gray-900/50" [class]="getRarityBorderClass(data.hero.rarity)">
+              <span class="font-orbitron text-5xl text-gray-200 drop-shadow-lg relative z-10">{{ getHeroInitials(data.hero.name) }}</span>
+            </div>
+            <div class="flex-grow text-center sm:text-left">
+              <h2 class="font-orbitron text-3xl font-bold text-white">{{ data.hero.name }}</h2>
+              <p class="text-lg font-semibold" [class]="getRarityTextColor(data.hero.rarity)">{{ data.hero.rarity }} {{ data.hero.role }}</p>
+            </div>
+          </div>
+
+          <!-- Details Grid -->
+          <div class="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+            <!-- Stats Card -->
+            <div class="bg-gray-900/50 rounded-lg p-4">
+              <h3 class="text-xl font-orbitron text-blue-300 mb-2 border-b border-gray-700 pb-1">Base Stats</h3>
+              <div class="space-y-1 text-sm grid grid-cols-2 gap-x-4">
+                <span class="text-gray-400">Base DPS:</span> <span class="font-semibold text-white">{{ data.hero.baseDps }}</span>
+                <span class="text-gray-400">Base Cost:</span> <span class="font-semibold text-white">💰 {{ data.hero.baseCost }}</span>
+                <span class="text-gray-400">Cost Multiplier:</span> <span class="font-semibold text-white">{{ data.hero.upgradeCostMultiplier }}x</span>
+              </div>
+            </div>
+            <!-- Skill Card -->
+            <div class="bg-gray-900/50 rounded-lg p-4">
+              <h3 class="text-xl font-orbitron text-blue-300 mb-2 border-b border-gray-700 pb-1">Active Skill</h3>
+              <p class="text-sm text-gray-300">{{ data.hero.skillDescription }}</p>
+            </div>
+            <!-- Lore Card -->
+            <div class="bg-gray-900/50 rounded-lg p-4">
+              <h3 class="text-xl font-orbitron text-blue-300 mb-2 border-b border-gray-700 pb-1">Lore</h3>
+              <p class="text-sm text-gray-400 italic">{{ data.hero.lore }}</p>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="text-center p-8">
+            <div class="w-32 h-32 rounded-md flex items-center justify-center bg-black border-4 border-gray-600 mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <h2 class="text-3xl font-orbitron text-gray-500">DATA CORRUPTED</h2>
+            <p class="text-gray-400 mt-4">This hero's data file is encrypted. Unlock this hero through the Summoning Portal to decrypt their information.</p>
+        </div>
+      }
+    </div>
+  </div>
+}

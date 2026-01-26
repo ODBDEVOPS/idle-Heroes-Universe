@@ -1,0 +1,73 @@
+<div class="h-full w-full bg-gray-800 p-4 flex flex-col animate-fadeIn">
+  <header class="text-center mb-4">
+    <h1 class="text-3xl font-orbitron text-green-400">Inventory</h1>
+    <p class="text-gray-400">All your collected equipment in one place.</p>
+  </header>
+
+  <!-- Filtering and Sorting controls -->
+  <div class="bg-gray-900/50 p-3 rounded-lg mb-4 flex flex-col sm:flex-row gap-4 items-center justify-between">
+    <!-- Rarity Filters -->
+    <div class="flex items-center gap-2 flex-wrap justify-center">
+      @for (rarity of rarities; track rarity) {
+        <button
+          (click)="setRarityFilter(rarity)"
+          class="px-3 py-1 text-xs font-bold rounded-full transition-all duration-200 transform hover:scale-105 active:scale-95"
+          [class.bg-green-600]="activeRarityFilter() === rarity"
+          [class.text-white]="activeRarityFilter() === rarity"
+          [class.bg-gray-700]="activeRarityFilter() !== rarity"
+          [class.text-gray-300]="activeRarityFilter() !== rarity"
+          [class.hover:bg-green-800]="activeRarityFilter() !== rarity">
+          {{ rarity }}
+        </button>
+      }
+    </div>
+    <!-- Sort Dropdown -->
+    <div class="flex items-center gap-2 shrink-0">
+      <label for="sort-select" class="text-gray-400 font-semibold text-sm">Sort by:</label>
+      <select
+        id="sort-select"
+        (change)="onSortChange($event)"
+        class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-green-500 focus:border-green-500 p-1.5">
+        <option value="rarity" [selected]="activeSort() === 'rarity'">Rarity</option>
+        <option value="name" [selected]="activeSort() === 'name'">Name</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Inventory Grid -->
+  <div class="flex-grow overflow-y-auto pr-2">
+    @if (gameService().inventory().length > 0) {
+      @for(slot of slots; track slot) {
+        <div class="mb-6">
+            <h3 class="text-xl font-orbitron text-gray-300 mb-2 border-b-2 border-gray-700 pb-1">{{ slot }}s</h3>
+            @if(filteredAndSortedInventory()[slot].length > 0) {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    @for(item of filteredAndSortedInventory()[slot]; track item.id) {
+                        <div class="bg-gray-900 p-3 rounded-lg border-l-4" [class]="getRarityBorderClass(item.rarity)" [appTooltip]="item.lore">
+                            <p class="font-bold text-base" [class]="getRarityTextColor(item.rarity)">
+                                {{ item.name }}
+                                @if(item.enchantLevel > 0) {
+                                    <span class="text-yellow-400">+{{ item.enchantLevel }}</span>
+                                }
+                            </p>
+                            <p class="text-sm font-semibold text-green-400">{{ formatBonus(item) }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ item.rarity }} {{ item.slot }}</p>
+                        </div>
+                    }
+                </div>
+            } @else {
+                 <p class="text-gray-500 italic text-center py-4">No {{ slot.toLowerCase() }}s match the current filter.</p>
+            }
+        </div>
+      }
+    } @else {
+      <div class="text-center py-10 flex flex-col items-center justify-center h-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+        </svg>
+        <p class="text-gray-500 italic text-lg">Your inventory is empty.</p>
+        <p class="text-gray-400 mt-2">Defeat enemies and complete quests to find equipment!</p>
+      </div>
+    }
+  </div>
+</div>

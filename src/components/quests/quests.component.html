@@ -1,0 +1,69 @@
+<div class="h-full w-full bg-gray-800 p-4 flex flex-col animate-fadeIn">
+  <header class="text-center mb-4">
+    <h1 class="text-3xl font-orbitron text-yellow-400">Quests</h1>
+    <p class="text-gray-400">Complete objectives to earn rewards.</p>
+  </header>
+  
+  <!-- Tabs -->
+  <div class="mb-4 flex space-x-1 sm:space-x-2 border-b-2 border-gray-700">
+    @for(category of questCategories; track category) {
+      <button
+        (click)="changeCategory(category)"
+        class="px-3 sm:px-4 py-2 text-sm sm:text-base font-orbitron transition-all duration-200 flex-grow text-center transform"
+        [class.text-yellow-400]="activeCategory() === category"
+        [class.border-b-2]="activeCategory() === category"
+        [class.border-yellow-400]="activeCategory() === category"
+        [class.text-gray-400]="activeCategory() !== category"
+        [class.hover:text-white]="activeCategory() !== category"
+        [class.hover:bg-gray-700/50]="activeCategory() !== category"
+        [class.hover:-translate-y-0.5]="activeCategory() !== category"
+      >
+        {{ category }}
+      </button>
+    }
+  </div>
+
+  <div class="flex-grow overflow-y-auto pr-2">
+    @if (filteredQuests().length > 0) {
+      <div class="grid grid-cols-1 gap-4">
+        @for (quest of filteredQuests(); track quest.id) {
+          <div 
+            class="bg-gray-900 rounded-lg p-4 flex items-center justify-between border-l-4 transition-all duration-300"
+            [class.border-green-500]="quest.isCompleted && !quest.isClaimed"
+            [class.border-gray-600]="!quest.isCompleted"
+            [class.border-yellow-600]="quest.isClaimed"
+            [class.opacity-60]="quest.isClaimed"
+            [class.hover:-translate-y-1]="!quest.isClaimed"
+            [class.hover:bg-gray-800]="!quest.isClaimed"
+          >
+            <div>
+              <h3 class="font-bold text-lg text-white">{{ quest.description }}</h3>
+              <p class="text-sm text-yellow-300">
+                Reward: 💰 {{ formatNumber(quest.reward.gold) }}
+                @if(quest.reward.prestigePoints) {
+                  <span>, 💎 {{ formatNumber(quest.reward.prestigePoints) }}</span>
+                }
+              </p>
+            </div>
+            
+            @if(quest.isCompleted && !quest.isClaimed) {
+              <button 
+                (click)="claimReward(quest.id)"
+                class="px-4 py-2 bg-green-600 text-white font-bold rounded-md hover:bg-green-700 transition-colors duration-200 transform active:scale-100 hover:scale-105 animate-pulse-glow">
+                Claim
+              </button>
+            } @else if(quest.isClaimed) {
+               <span class="text-lg font-bold text-gray-500">Claimed</span>
+            } @else {
+              <span class="text-sm text-gray-400">In Progress</span>
+            }
+          </div>
+        }
+      </div>
+    } @else {
+       <div class="text-center py-10">
+        <p class="text-gray-500 italic">No quests in this category yet.</p>
+      </div>
+    }
+  </div>
+</div>

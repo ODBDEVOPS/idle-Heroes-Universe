@@ -1,0 +1,98 @@
+<div class="h-full w-full bg-gray-800 p-4 flex flex-col animate-fadeIn relative overflow-hidden">
+  <header class="text-center mb-4 z-10">
+    <h1 class="text-3xl font-orbitron text-red-400">Tower of Trials</h1>
+    <p class="text-gray-400">Climb the tower for great rewards. Progress is permanent.</p>
+  </header>
+
+  <!-- Background VFX -->
+  <div class="absolute inset-0 bg-gradient-to-b from-gray-900 via-red-900/40 to-gray-900 opacity-50"></div>
+  <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(220,38,38,0.3),rgba(255,255,255,0))]"></div>
+
+  <!-- Fight Result Banners -->
+  @if (fightResult() === 'victory') {
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
+      <div class="text-center animate-stage-clear">
+        <h2 class="text-6xl font-orbitron font-bold text-green-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)]">
+          VICTORY!
+        </h2>
+        <p class="text-2xl text-white drop-shadow-lg">
+          Floor {{ gameService().gameState().towerFloor - 1 }} Cleared
+        </p>
+      </div>
+    </div>
+  }
+  @if (fightResult() === 'defeat') {
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
+      <div class="text-center animate-stage-clear">
+        <h2 class="text-6xl font-orbitron font-bold text-red-500 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)]">
+          DEFEAT
+        </h2>
+        <p class="text-2xl text-white drop-shadow-lg">
+          Try again when you are stronger.
+        </p>
+      </div>
+    </div>
+  }
+
+  @if (isFighting() && gameService().towerEnemy(); as enemy) {
+    <!-- Combat View -->
+    <div class="flex-grow flex flex-col items-center justify-center relative z-10 p-4 animate-fadeIn">
+      <div class="absolute top-4 right-4 bg-black/50 p-2 rounded-lg text-center">
+        <div class="font-orbitron text-4xl text-red-400">{{ fightTimer() }}</div>
+        <div class="text-xs text-gray-300">SECONDS LEFT</div>
+      </div>
+
+      <div class="text-center mb-4">
+        <h2 class="text-3xl font-bold font-orbitron drop-shadow-md text-red-300">{{ enemy.name }}</h2>
+        <p class="text-xl text-gray-200">{{ formatNumber(enemy.currentHp) }} / {{ formatNumber(enemy.maxHp) }}</p>
+      </div>
+
+      <div class="w-full max-w-md bg-gray-700/80 rounded-full h-8 border-2 border-red-500 mb-4">
+        <div class="bg-red-600 h-full rounded-full transition-all duration-200" [style.width.%]="enemyHpPercentage()"></div>
+      </div>
+
+      <div class="relative">
+        <pre 
+          (click)="onEnemyClick()"
+          class="text-4xl md:text-5xl text-center text-red-400 font-mono cursor-pointer select-none drop-shadow-lg p-4 transition-transform duration-100 ease-out hover:scale-105 active:scale-95 leading-tight"
+        >{{ enemy.asciiArt }}</pre>
+      </div>
+       <div class="mt-4 bg-gray-900/70 px-4 py-2 rounded-full border border-purple-400">
+        <span class="text-lg font-bold text-purple-400">Your DPS: {{ formatNumber(gameService().totalDps()) }}</span>
+      </div>
+    </div>
+  } @else {
+    <!-- Main Tower View -->
+    <div class="flex-grow flex flex-col justify-center items-center z-10">
+      <div class="bg-gray-900/70 p-8 rounded-xl shadow-2xl border border-red-500/50 text-center max-w-md">
+        <h2 class="text-4xl font-orbitron text-white">Floor {{ gameService().gameState().towerFloor }}</h2>
+        <p class="text-gray-300 mt-2">Prepare to face the next guardian.</p>
+
+        <div class="my-6 bg-gray-800 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-yellow-300">Potential Rewards</h3>
+          <div class="mt-2 text-xl text-white flex justify-center items-center gap-4 flex-wrap">
+            <span>💰 {{ formatNumber(towerReward().gold) }}</span>
+            @if (towerReward().prestigePoints > 0) {
+              <span>💎 {{ formatNumber(towerReward().prestigePoints) }}</span>
+            }
+          </div>
+          @if (towerReward().artifact; as artifact) {
+            <div class="mt-4 pt-4 border-t border-gray-700 text-center">
+              <p class="text-sm font-bold text-yellow-300 shimmer-text-gold animate-pulse">ARTIFACT REWARD</p>
+              <p class="font-semibold text-lg text-white mt-1">{{ artifact.name }}</p>
+              <p class="text-xs text-gray-400">{{ artifact.description }}</p>
+            </div>
+          }
+        </div>
+
+        <button 
+          (click)="challengeFloor()"
+          [disabled]="isFighting() || fightResult() !== null"
+          [appTooltip]="(isFighting() || fightResult() !== null) ? 'Cannot start a new challenge right now' : 'Face the guardian of Floor ' + gameService().gameState().towerFloor"
+          class="w-full py-4 bg-red-600 text-white font-bold text-xl rounded-md hover:bg-red-700 transition-all duration-200 disabled:bg-gray-700 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100 disabled:hover:scale-100 shadow-lg hover:shadow-xl hover:shadow-red-500/40">
+          Challenge Floor
+        </button>
+      </div>
+    </div>
+  }
+</div>
