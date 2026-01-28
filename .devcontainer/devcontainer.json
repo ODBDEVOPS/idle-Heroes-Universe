@@ -1,0 +1,7 @@
+{
+  "postCreateCommand": "npm install",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "Web App", "onAutoForward": "openBrowser" }
+  }
+}
